@@ -1,7 +1,7 @@
 import java.util.*;
 
 
-public class DijkstraAlgo {
+public class BellmanFordAlgo {
     static class Edge {
         int src;
         int des;
@@ -14,19 +14,8 @@ public class DijkstraAlgo {
         }
 
     }
-    static class Pair implements Comparable<Pair> {
-        int n ;
-        int len;
-        public Pair(int n,int len){
-            this.n=n;
-            this.len = len;
-        }
 
-    @Override
-    public int compareTo(Pair p2){
-        return this.len- p2.len;
-    }
-}
+
     public static void makingPath(ArrayList<Edge>[] graph,int src)
     {
         boolean vis[] = new boolean[graph.length];
@@ -36,26 +25,21 @@ public class DijkstraAlgo {
             if(i!=src)
             dis[i]=Integer.MAX_VALUE;
         }
-        PriorityQueue<Pair> pq = new PriorityQueue<>();
-        pq.add(new Pair(src, 0));
-        while(!pq.isEmpty())
+        for(int i=0;i<graph.length-1;i++)
         {
-            Pair curr= pq.remove();
-            if(!vis[curr.n])
-            vis[curr.n]=true;
-            for(int i=0;i<graph[curr.n].size();i++)
+            for(int j =0;j<graph.length;j++)
             {
-                Edge e= graph[curr.n].get(i);
-                int u = e.src;
-                int wht = e.wht;
-                int des = e.des;
-                if(dis[u]+wht<dis[des])
+                for(int k=0;k<graph[j].size();k++)
                 {
-                    dis[des] = dis[u]+wht;
-                    pq.add(new Pair(des, dis[des]));
+                    Edge e =graph[j].get(k);
+                    if(dis[e.src]!=Integer.MAX_VALUE&& dis[e.src]+e.wht<dis[e.des])
+                    {
+                        dis[e.des]=dis[e.src]+e.wht;
+                    }
                 }
             }
         }
+        
         for(int i  =0;i<dis.length;i++)
         {
             System.out.println(dis[i]);
